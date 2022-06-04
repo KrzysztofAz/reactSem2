@@ -1,7 +1,9 @@
 import React from "react";
 import commonColumnsStyles from "../../common/styles/Columns.module.scss";
+import { connect } from "react-redux";
+import axios from "axios";
 
-function ProductsList() {
+function ProductsList({productsFromStore}) {
   return (
     <div className={commonColumnsStyles.App}>
       <header className={commonColumnsStyles.AppHeader}>
@@ -17,9 +19,20 @@ function ProductsList() {
         >
           Przykładowy aktywny produkt
         </span> */}
+
+        {productsFromStore?.map((element, i) => <li key={i}>{element.name}</li>)}
+
       </header>
     </div>
   );
 }
 
-export default ProductsList;
+const mapStateToProps = (state) => {
+  
+  return {
+    productsFromStore: state.products.productsList,
+  };
+};
+
+// export default ProductsList;
+export default connect(mapStateToProps)(ProductsList);
