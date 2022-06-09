@@ -3,7 +3,20 @@ import commonColumnsStyles from "../../common/styles/Columns.module.scss";
 import { connect } from "react-redux";
 import axios from "axios";
 
-function ProductsList({productsFromStore}) {
+function ProductsList({ productsFromStore, addToShopingList }) {
+  const addProduct = async (product) => {
+    console.log();
+    try {
+      const response = await axios.post(
+        "http://localhost:9000/products/shopingList/new",
+        product
+      );
+
+      addToShopingList(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className={commonColumnsStyles.App}>
       <header className={commonColumnsStyles.AppHeader}>
@@ -20,19 +33,28 @@ function ProductsList({productsFromStore}) {
           Przykładowy aktywny produkt
         </span> */}
 
-        {productsFromStore?.map((element, i) => <li key={i}>{element.name}</li>)}
-
+        {productsFromStore?.map((element, i) => (
+          <li onClick={() => addProduct(element)} key={i}>
+            {element.name}
+          </li>
+        ))}
       </header>
     </div>
   );
 }
 
-const mapStateToProps = (state) => {
-  
+const mapDispatchToProps = (dispatch) => {
   return {
-    productsFromStore: state.products.productsList,
+    addToShopingList: (value) =>
+      dispatch({ type: "ADD_PRODUCT", value: value }),
+  };
+};
+
+const mapStateToProps = (state) => {
+  return {
+    productsFromStore: state.products.filteredProductsList,
   };
 };
 
 // export default ProductsList;
-export default connect(mapStateToProps)(ProductsList);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductsList);

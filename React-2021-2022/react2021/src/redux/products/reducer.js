@@ -3,7 +3,26 @@ import { initialProductState } from "./initialState";
 export const productReducer = (state = initialProductState, action) => {
   switch (action.type) {
     case "SET_INITIAL_PRODUCTS_LIST":
-      return { ...state, productsList: action.value };
+      return {
+        ...state,
+        productsList: action.value,
+        filteredProductsList: action.value,
+      };
+    case "FILTER_PRODUCTS_LIST":
+      console.log(action.value);
+      let filteredProducts = state.productsList.filter((product) =>
+        product.name.toLowerCase().includes(action.value.text.toLowerCase())
+      );
+
+      if (action.value.foodOnly) {
+        console.log("sskjhkjhjk");
+        filteredProducts = filteredProducts.filter((product) => product.isFood);
+      }
+
+      console.log(filteredProducts);
+
+      return { ...state, filteredProductsList: filteredProducts };
+
     default:
       return state;
   }
