@@ -2,8 +2,13 @@ import React from "react";
 import commonColumnsStyles from "../../common/styles/Columns.module.scss";
 import { connect } from "react-redux";
 import axios from "axios";
+import { Stack, Paper } from "@mui/material";
 
-function ProductsList({ productsFromStore, addToShopingList }) {
+function ProductsList({
+  productsFromStore,
+  addToShopingList,
+  setLoadingProductStatus,
+}) {
   const addProduct = async (product) => {
     console.log();
     try {
@@ -21,6 +26,7 @@ function ProductsList({ productsFromStore, addToShopingList }) {
     <div className={commonColumnsStyles.App}>
       <header className={commonColumnsStyles.AppHeader}>
         <p>Products list</p>
+
         {/* Poniżej znajduje się ostylowany aktywny produkt do zadania 5 */}
         {/* <span
           style={{
@@ -32,12 +38,13 @@ function ProductsList({ productsFromStore, addToShopingList }) {
         >
           Przykładowy aktywny produkt
         </span> */}
-
-        {productsFromStore?.map((element, i) => (
-          <li onClick={() => addProduct(element)} key={i}>
-            {element.name}
-          </li>
-        ))}
+        <Stack spacing={2}>
+          {productsFromStore?.map((product, i) => (
+            <Paper key={i} onClick={() => addProduct(product)}>
+              {`${product.id}. ${product.name}`}
+            </Paper>
+          ))}
+        </Stack>
       </header>
     </div>
   );
@@ -47,6 +54,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addToShopingList: (value) =>
       dispatch({ type: "ADD_PRODUCT", value: value }),
+    setLoadingProductStatus: (value) =>
+      dispatch({ type: "SET_PRODUCTS_LOADING_STATE", value: value }),
   };
 };
 
@@ -56,5 +65,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-// export default ProductsList;
 export default connect(mapStateToProps, mapDispatchToProps)(ProductsList);

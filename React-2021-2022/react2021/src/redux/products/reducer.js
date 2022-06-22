@@ -15,7 +15,7 @@ export const productReducer = (state = initialProductState, action) => {
       );
 
       if (action.value.foodOnly) {
-        console.log("sskjhkjhjk");
+        // console.log("test");
         filteredProducts = filteredProducts.filter((product) => product.isFood);
       }
 
