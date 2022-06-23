@@ -79,7 +79,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state) => {
   return {
     shopingListFromRedux: state.shopingList.shopingList,
-    productStatus: state.products.loadingStatus,
+    productStatus: state.shopingList.loadingStatus,
   };
 };
 

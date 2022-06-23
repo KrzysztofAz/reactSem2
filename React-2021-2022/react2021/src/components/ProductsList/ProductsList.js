@@ -12,12 +12,14 @@ function ProductsList({
   const addProduct = async (product) => {
     console.log();
     try {
+      setLoadingProductStatus("loading");
       const response = await axios.post(
         "http://localhost:9000/products/shopingList/new",
         product
       );
 
       addToShopingList(response.data);
+      setLoadingProductStatus("initial");
     } catch (err) {
       console.log(err);
     }
