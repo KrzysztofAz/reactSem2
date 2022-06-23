@@ -11,11 +11,9 @@ function ShopingList({
   shopingListFromRedux,
   setLoadingProductStatus,
   productStatus,
-  // removeProductFromShopingList,
 }) {
   const getShoppingList = async () => {
     try {
-      setLoadingProductStatus("loading");
       const response = await axios.get(
         "http://localhost:9000/products/shopingList"
       );
@@ -33,8 +31,6 @@ function ShopingList({
         .delete(`http://localhost:9000/products/shopingList/${productId}`)
         .then((res) => {
           getShoppingList();
-          setLoadingProductStatus("initial");
-          // removeProductFromShopingList(productId)
         });
     } catch (err) {
       console.log(err);

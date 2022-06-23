@@ -3,8 +3,6 @@ import ProductsFilters from "./components/ProductsFilters/ProductsFilters";
 import styles from "./App.module.scss";
 import { Navigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
-// import { connect } from "react-redux";
-
 
 
 function App(props) {
@@ -23,12 +21,3 @@ function App(props) {
 
 export default App;
 
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     setInitialAirportsList: (value) =>
-//       dispatch({ type: "SET_INITIAL_PRODUCTS_LIST", value: value }),
-//   };
-// };
-
-// export default connect(null, mapDispatchToProps)(App);
