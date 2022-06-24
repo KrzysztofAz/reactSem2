@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import commonColumnsStyles from "../../common/styles/Columns.module.scss";
 import { connect } from "react-redux";
 import axios from "axios";
 import { Stack, Paper } from "@mui/material";
 import { useNavigate } from "react-router";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function ProductsList({
   productsFromStore,
@@ -12,6 +13,7 @@ function ProductsList({
   setSelectedProduct,
 }) {
   const navigate = useNavigate();
+  const [loadingProductDetails, setloadingProductDetails] = useState(null);
 
   const addProduct = async (product) => {
     console.log();
@@ -31,10 +33,12 @@ function ProductsList({
 
   const showDetails = async (product) => {
     try {
+      setloadingProductDetails(product.id);
       const response = await axios.get(
         `http://localhost:9000/products/${product.id}`
       );
       setSelectedProduct(response.data);
+      setloadingProductDetails(null);
       navigate(`/product/details/${product.id}`);
     } catch (err) {
       console.log(err);
@@ -58,18 +62,22 @@ function ProductsList({
           Przykładowy aktywny produkt
         </span> */}
         <Stack spacing={2}>
-          {productsFromStore?.map((product, i) => (
-            <Paper
-              key={i}
-              onClick={() => addProduct(product)}
-              onContextMenu={(e) => {
-                e.preventDefault();
-                showDetails(product);
-              }}
-            >
-              {`${product.id}. ${product.name}`}
-            </Paper>
-          ))}
+          {productsFromStore?.map((product, i) =>
+            loadingProductDetails === product.id ? (
+              <CircularProgress />
+            ) : (
+              <Paper
+                key={i}
+                onClick={() => addProduct(product)}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  showDetails(product);
+                }}
+              >
+                {`${product.id}. ${product.name}`}
+              </Paper>
+            )
+          )}
         </Stack>
       </header>
     </div>
