@@ -8,6 +8,7 @@ import reportWebVitals from "./reportWebVitals";
 import Dashboard from "./components/Dashboard/Dashboard";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
+import ProductsDetails from "./components/ProductsDetails/ProductsDetails";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -16,6 +17,9 @@ ReactDOM.render(
         <Route path="/" element={<LoginPage />} />
         <Route path="products" element={<App />}>
           <Route path="dashboard" element={<Dashboard />} />
+        </Route>
+        <Route path="product" element={<App />}>
+          <Route path="details/:id" element={<ProductsDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>

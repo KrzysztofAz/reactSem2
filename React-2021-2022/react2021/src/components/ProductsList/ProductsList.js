@@ -3,12 +3,16 @@ import commonColumnsStyles from "../../common/styles/Columns.module.scss";
 import { connect } from "react-redux";
 import axios from "axios";
 import { Stack, Paper } from "@mui/material";
+import { useNavigate } from "react-router";
 
 function ProductsList({
   productsFromStore,
   addToShopingList,
   setLoadingProductStatus,
+  setSelectedProduct,
 }) {
+  const navigate = useNavigate();
+
   const addProduct = async (product) => {
     console.log();
     try {
@@ -24,6 +28,19 @@ function ProductsList({
       console.log(err);
     }
   };
+
+  const showDetails = async (product) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9000/products/${product.id}`
+      );
+      setSelectedProduct(response.data);
+      navigate(`/product/details/${product.id}`);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className={commonColumnsStyles.App}>
       <header className={commonColumnsStyles.AppHeader}>
@@ -42,7 +59,14 @@ function ProductsList({
         </span> */}
         <Stack spacing={2}>
           {productsFromStore?.map((product, i) => (
-            <Paper key={i} onClick={() => addProduct(product)}>
+            <Paper
+              key={i}
+              onClick={() => addProduct(product)}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                showDetails(product);
+              }}
+            >
               {`${product.id}. ${product.name}`}
             </Paper>
           ))}
@@ -56,6 +80,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addToShopingList: (value) =>
       dispatch({ type: "ADD_PRODUCT", value: value }),
+    setSelectedProduct: (value) =>
+      dispatch({ type: "SET_SELECTED_PRODUCT", value: value }),
     setLoadingProductStatus: (value) =>
       dispatch({ type: "SET_PRODUCTS_LOADING_STATE", value: value }),
   };
